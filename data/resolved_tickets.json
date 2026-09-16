@@ -1,0 +1,57 @@
+[
+  {
+    "id": "INC-1001",
+    "title": "User cannot access shared drive after password reset",
+    "description": "Employee reset their password via self-service portal and lost access to the department shared drive. VPN connects fine, other apps work.",
+    "root_cause": "Password reset did not propagate to the file server's cached credential store.",
+    "resolution_steps": [
+      "Ask user to fully log off and log back in (not just lock/unlock) to refresh cached credentials.",
+      "If unresolved, manually clear the user's cached credential entry on the file server via Server Manager.",
+      "Re-map the network drive from the user's machine and confirm access."
+    ]
+  },
+  {
+    "id": "INC-1002",
+    "title": "Application throws 500 error on login",
+    "description": "Internal HR portal returns a 500 Internal Server Error when specific users attempt to log in. Other users unaffected.",
+    "root_cause": "Corrupted session token for affected users after a recent SSO configuration change.",
+    "resolution_steps": [
+      "Clear the affected user's session cache in the identity provider.",
+      "Force a re-authentication by revoking the user's active SSO session.",
+      "Confirm the SSO claim mapping still matches the portal's expected schema."
+    ]
+  },
+  {
+    "id": "INC-1003",
+    "title": "VPN disconnects every 10 minutes",
+    "description": "Remote employee reports VPN client disconnects repeatedly, roughly every 10 minutes, since switching to new home router.",
+    "root_cause": "Router's NAT keep-alive timeout shorter than VPN idle timeout, dropping the tunnel.",
+    "resolution_steps": [
+      "Have user lower VPN client idle timeout below router NAT timeout, or enable keep-alive packets in VPN client settings.",
+      "Recommend user check router firmware for NAT session timeout setting and increase it if configurable.",
+      "If issue persists, escalate to network team to review firewall UDP timeout for VPN traffic."
+    ]
+  },
+  {
+    "id": "INC-1004",
+    "title": "Email attachments not sending",
+    "description": "User unable to send emails with attachments over 10MB; smaller attachments work fine.",
+    "root_cause": "Mail gateway attachment size limit set below the mail client's allowed limit, causing silent rejection.",
+    "resolution_steps": [
+      "Check mail gateway's configured max attachment size against client-side limit.",
+      "Advise user to use the file-sharing link workflow for attachments over the gateway limit.",
+      "If business-justified, submit a change request to raise the gateway limit for the affected department."
+    ]
+  },
+  {
+    "id": "INC-1005",
+    "title": "Laptop running extremely slow after Windows update",
+    "description": "Employee's laptop became very slow immediately after an overnight Windows update. High disk usage in Task Manager.",
+    "root_cause": "Post-update Windows Search indexing service consuming disk I/O while re-indexing.",
+    "resolution_steps": [
+      "Confirm high disk usage is from SearchIndexer.exe in Task Manager.",
+      "Let indexing complete overnight, or temporarily pause Windows Search indexing if urgent.",
+      "If disk usage doesn't subside after 24 hours, check for a stuck update or run disk cleanup."
+    ]
+  }
+]
